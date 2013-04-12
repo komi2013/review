@@ -1,0 +1,100 @@
+<div>
+<button class="run">run</button>
+</div>
+</br>
+<a class="show">--option--</a></br>
+</br>
+<div class="option">
+  <div><button class="apply">apply</button></div>
+  <span class="success">success</br></span>
+<div>
+<textarea id="title">
+<?=$enqu->title;?>
+</textarea></br>
+<span class="err_title"></span>
+</div>
+<div>
+<textarea id="end_txt">
+<?=$enqu->end_txt;?>
+</textarea></br>
+<span class="err_end_txt"></span>
+</div>
+
+
+<?php if($pre_url){ ?>
+<a href="<?=$pre_url;?>">pre test</a></br>
+<?php } ?>
+</div>
+
+<script type="text/javascript">
+
+var post_url = '/<?=$lang;?>/in/titleend/<?=$enqu->id;?>';
+var arr = [];
+$('.apply').click(function() {
+  var param = {
+    title  : $('#title').val(),
+    end_txt  : $('#end_txt').val(),
+  };
+  var cli = this;
+	$.ajax({type:'POST',dataType:'json',url:post_url,data:param,})
+  .always(function(data){
+    if(data['chk'] == 1){
+      $('.success').fadeIn(1); 
+      $('.success').fadeOut(1000);
+      $(cli).parent("div").parent("div").css( 'background-color','#e0ffff')
+      $(".err_title").text('')
+      $(".err_end_txt").text('')
+    }else{
+      $(".err_title").text(data['title'])
+      $(".err_end_txt").text(data['end_txt'])
+    }
+  });
+});
+
+var ok = 'are you OK to run? after run, you can not edit';
+var confirm = 'confirmation';
+$('.run').click(function() {
+	jConfirm(ok, confirm, function(r) {
+		if(r){
+      var param = { run  : 'run', };
+    	$.ajax({type:'POST',dataType:'json',url:post_url,data:param,})
+      .always(function(data){
+        if(data['chk'] == 1){
+          window.location.replace('/<?=$lang;?>/review/')
+        }else{
+          alert(data['err'])
+        }
+      });
+		}
+	});
+});
+
+
+$(".option").css("display", "none");
+
+$('.show').toggle(function(){
+  $('.option').css("display", "block");
+  $('.run').css("display", "none");
+},
+function(){
+  $('.option').css("display", "none");
+  $('.run').css("display", "block");
+});
+</script>
+
+<style type="text/css">
+span{
+ color: red;
+}
+.run{
+ box-shadow: 1px 1px 5px #aaa;
+}
+.success{
+ display:none;
+ color:green;
+}
+.show{
+ cursor:pointer
+}
+</style>
+

@@ -1,0 +1,35 @@
+<?php defined('SYSPATH') OR die('No direct access allowed.');
+class Controller_In_Delans extends Controller {
+	public function action_index()
+	{
+    $this->session = Session::instance();
+    $this->u_id = $this->session->get('u_id');
+    if (!$this->u_id) die('you can not post this page');
+    $this->enqu_id = $this->request->param('one');
+   	$this->lang = $this->request->param('lang');
+// 		$this->q_num = $this->request->param('two');
+//     $this->enqu_id = 27;
+
+		$question = ORM::factory('question')->where('enqu_id', '=', $this->enqu_id)->order_by('q_num')->find_all();
+    error_reporting(E_ALL & E_NOTICE);
+    $del = 0;
+    foreach ($question as $k => $d)
+    {
+//       ++$k;
+      $ancho = ORM::factory('ancho')->where('p_qu_id', '=', $d->id)->where('u_id', '=', $this->u_id)->find();
+      if ($ancho->loaded()) 
+      {
+        $ancho->delete();
+        ++$del;
+      }
+      $antxt = ORM::factory('antxt')->where('p_qu_id', '=', $d->id)->where('u_id', '=', $this->u_id)->find();
+      if ($antxt->loaded())
+      {
+        $antxt->delete();
+        ++$del;
+      }
+    }
+    echo '{"1":"'.$del.'"}'; 
+  }
+}
+//end

@@ -1,0 +1,131 @@
+<input type="text" value="run" id="title">
+
+<div>
+<p>title</p>
+<textarea>
+<?=HTML::chars($enqu->title);?>
+</textarea>
+
+<input type="submit" value="run" id="run">
+<input type="submit" value="update" id="send">
+</div>
+
+</br>
+</br>
+
+<?php $qu_loop = 0; foreach ($qu as $k => $d) { ?>
+<div id="<?=$qu_loop;?>">
+  
+  <textarea class="q_txt"><?=HTML::chars($d['q_txt']);?></textarea>
+  </br>
+  <table>
+    <tr>
+    <?php  foreach ($d['choice'] as $k => $d) { ?>
+      <td><input type="text" value="<?=HTML::chars($d);?>"></td>
+    <?php  } ?>
+    </tr>
+    <tr>
+      <td class="cho_1">1</td>
+      <td class="cho_2">2</td>
+      <td class="cho_3">3</td>
+      <td class="cho_4">4</td>
+      <td class="cho_5">5</td>
+    </tr>
+  </table>
+  <a id="night">apply</a>
+  </br>  
+  </br>
+</div>
+<?php ++$qu_loop; } while ($qu_loop < 4) { ?>
+<div id="<?=$qu_loop;?>">
+  <textarea class="q_txt">sample <?=$qu_loop;?>   </textarea>
+  </br>
+  <table>
+  <tr>
+    <td><input type="text" class="cho_1" value="very bad"></td>
+    <td><input type="text" class="cho_2" value="bad"></td>
+    <td><input type="text" class="cho_3" value="ok"></td>
+    <td><input type="text" class="cho_4" value="good"></td>
+    <td><input type="text" class="cho_5" value="very good"></td>
+  </tr>
+  <tr> <td>1</td> <td>2</td> <td>3</td> <td>4</td> <td>5</td> </tr>
+  </table>
+  </br>
+  <a id="night">apply</a>
+  </br>
+  </br>
+</div>
+<?php ++$qu_loop; } ?>
+
+<input type="submit" value = "submit">
+
+<input type="button" value="add form" id="add_btn">
+
+</form>
+
+<script type="text/javascript">
+
+var post_url = '/<?=$lang;?>/in/review/<?=Request::current()->param('one');?>';
+var ok = 'are you sure';
+var confirm = 'confirmation';
+var post_arr = 'test';
+$('#send').click(function() {
+	jConfirm(ok, confirm, function(r) {
+		if(r){
+      var param = {
+        name : 'q txt',
+        arr : ["bad","hello","morning","pardon","good"],
+      };
+			$.ajax({
+				type: 'POST',
+        dataType:'text',
+				url: post_url,
+				data: param, 
+			})
+      .always(
+        function(data){alert(data)}
+      );
+		}
+	});
+});
+
+var arr = [];
+$('div').children('a').click(function() {
+  $(this).siblings("input").each(function(i){
+    arr[i] = $(this).val();
+  });
+//   console.log($(this).parent('div').attr('id'));
+  var param = {
+    q_txt  : $(this).siblings('textarea').val(),
+    choice : arr,
+    q_num  : $(this).parent('div').attr('id'),
+  };
+  var cli = this;
+	$.ajax({
+		type: 'POST',
+    dataType:'text',
+		url: post_url,
+		data: param, 
+	})
+  .always(function(data){
+    if(data == 0){
+      $(cli).parent("div").css( 'background-color','#777')
+      alert('sucess')
+    }else(
+      $('#run').text('test')
+// 		  alert(data)
+//       window.location.replace(data["url"])
+// console.log(data)
+// $('#3').css( 'background-color','#777')
+    )
+  });
+
+//   .fadeOut(
+//     "slow",
+//     function(){alert("フェードアウト完了")}
+// );
+
+
+});
+
+</script>

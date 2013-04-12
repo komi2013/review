@@ -1,0 +1,34 @@
+<?php defined('SYSPATH') or die('No direct script access.');
+class Model_Quiz extends ORM {
+
+protected $_table_name = 'quiz';
+//protected $_primary_key = 'id';
+
+    public function rules()
+    {
+        return array(
+//            'u_id' => array(
+//                array('not_empty'),
+//                //array('min_length', array(':value', 4)),
+//                array('max_length', array(':value', 32)),
+//                //array('regex', array(':value', '/^[-\pL\pN_.]++$/uD')),
+//                //array('digit'),
+//            ),
+//             'enqu_num' => array(
+//                 array('not_empty'),
+//                 array('digit'),
+//             ),
+            'score' => array(
+                array('not_empty'),
+                //array('digit'),
+            ),
+            'score_txt' => array(
+                array('not_empty'),
+                array('max_length', array(':value', 2000)),
+            ),
+            //'del' => array(),
+        );
+    }
+
+}
+?>

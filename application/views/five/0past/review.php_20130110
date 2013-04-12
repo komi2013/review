@@ -1,0 +1,56 @@
+<p>title</p></br>
+<textarea>
+<?=$enqu->title;?>
+</textarea>
+
+<input type="submit" value="run" id="run">
+<input type="submit" value="update" id="update">
+
+</br>
+
+<?php
+
+  $p_qu_id = 0;
+  $qu_loop = 0;
+  foreach ($qu as $k => $d) {
+  echo $d->p_qu_id; 
+?>
+<div>
+  <?php if($d->p_qu_id != $p_qu_id) { ?>
+    <!--<input type="text" name="<?=$k;?>[q_txt]" value="<?=$qu[$d->p_qu_id];?>" size="5" >-->
+    <textarea>   
+      <?=$qu[$d->p_qu_id];?>
+    </textarea>
+    </br>
+    </br>
+  <?php } ?>  
+  <input type="text" name="<?=$k;?>[txt]" value="<?=$d->txt;?>" size="5" >
+</div>
+<?php
+    $p_qu_id = $d->p_qu_id;
+    ++$qu_loop;
+  }
+echo $qu_loop;
+while ($qu_loop < 5)
+{
+?>
+<div>
+  <textarea>sample <?=$qu_loop;?>   </textarea>
+    </br>
+  <input type="text" name="<?=$qu_loop;?>[txt]" value="sample <?=$qu_loop;?>" size="5" >
+</div>
+<?php  
+  ++$qu_loop;  
+} 
+?>
+
+<input type="submit" value = "submit">
+
+<input type="button" value="add form" id="add_btn">
+
+</form>
+
+<script type="text/javascript">
+
+
+</script>

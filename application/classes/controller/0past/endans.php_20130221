@@ -1,0 +1,75 @@
+<?php defined('SYSPATH') OR die('No direct access allowed.');
+class Controller_Endans extends Controller_Before {
+	public function action_index()
+	{
+		echo $this->u_id;
+		$this->enqu_id = $this->request->param('one');
+		
+		$this->template->content = View::factory('question/end');
+		$this->template->content->post_res = array();
+		$enqu = ORM::factory('enquete')->where('id', '=', $this->enqu_id)->find();
+		
+		$this->page_title = $enqu->title;
+		
+		$endans = ORM::factory('endans')->where('enqu_id', '=', $this->enqu_id)->where('u_id', '=', $this->u_id)->find();
+		
+		$sumtype = ORM::factory('sumtype')->where('enqu_id', '=', $this->enqu_id)->where('u_id', '=', $this->u_id)->find_all();
+		
+		if ($enqu->hidden == 0 OR $enqu->hidden == 2)
+		{
+			$this->template->content->score = $endans->score;
+		}
+		else
+		{
+			$this->template->content->score = 'hidden';
+		}
+		$this->template->content->sumtype = array();
+		
+		foreach ($sumtype as $k => $d)
+		{
+			$type_arr[$k]['type'] = $d->type;
+			$type_arr[$k]['sum'] = $d->sum;
+			
+		}
+		//echo Debug::vars($type_arr);
+		if ($enqu->hidden == 0 OR $enqu->hidden == 1)
+		{
+			$this->template->content->sumtype = $type_arr;
+			//$this->template->content->sumtype['sum'] = $sumtype->sum;
+		}
+		else
+		{
+			$this->template->content->sumtype[0]['type'] = 'hidden';
+			$this->template->content->sumtype[0]['sum'] = 'hidden';
+		}
+		
+		//echo Debug::vars();
+		if ($_POST)
+		{
+			//$endans->q_pt;
+			$domain = new Model_Domain;
+
+			$send_data['deal_pt'] = $endans->q_pt;
+			$send_data['buyer'] = 33;
+			$send_data['seller'] = $this->u_id;
+			$send_data['item_id'] = $this->enqu_id;
+			$send_data['item_name'] = 'delivery No '.$this->enqu_id;
+			$send_data['url'] = $domain->ssl_users_deal;
+			//echo $send_data['onepass'].'</br>'.$onepass->onepass;
+			
+			$api = new Model_Api;
+			$api->https = $domain->ssl_users_deal;
+			$api->salt_key = $domain->key_users;
+			$api->send_data = $send_data;
+			$api_res = $api->send();
+			$obj_data = json_decode($api_res);
+			$this->post_res[0][0] = $api_res;
+			
+		}
+		//$this->template->content->sumtype = $sumtype;
+		//$this->template->content->question = $endans;
+		$this->template->content->q_pt = $endans->q_pt;
+		$this->template->content->enqu = $enqu;
+	}
+}
+//end

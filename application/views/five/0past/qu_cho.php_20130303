@@ -1,0 +1,88 @@
+<?php
+$controller = Request::current()->controller();
+$enqu_id = Request::current()->param('one');
+$qu_num = Request::current()->param('two') ?: 1;
+ if($status == 1 OR $status == 2) {
+?>
+
+<div>
+  <p><?=$q_txt;?></p>
+<?php foreach ($qucho as $k => $d) { ++$k; ?>
+    <p><?=HTML::chars($d->txt);?></p>
+<?php } ?>
+</div>
+
+<div>
+  <?php if($status == 1) {?>
+  <button id="finish">finish</button>&nbsp;
+  <?php } ?>
+  <button id="del">delete</button>
+</div>
+<?php }else{?>
+<div class="color">
+  <textarea><?=$q_txt;?></textarea></br>
+  <span class="q_txt"></span>
+  </br>
+<?php $k = 0; while($k < 5) { ++$k; ?>
+    <input type="radio" value="<?=$kk;?>" name="correct_<?=$k;?>" 
+      <?php if (isset($correct[$k]) AND $correct[$k] == $kk) echo 'checked';?> >
+    <input type="text" value="" class="cho_txt">
+    <span class="cho_<?=$k;?>"></span></br>
+<?php } ?>
+  <button class="choice">create</button></br>
+  <span class="success">success</span></br>
+  <a class="next" href="../../<?=$enqu_id.'/'.$qu_num;?>/">next</a></br>
+</div>
+
+<?php } ?>
+
+
+<script type="text/javascript">
+
+
+var post_url = '/<?=$lang;?>/in/<?=$controller;?>/<?=$enqu_id;?>/ ';
+var ok = 'after create, you can not edit. are you sure?';
+var confirm = 'confirmation';
+var arr = [];
+var enqu_id = '<?=$enqu_id;?>';
+$('div').children('.choice').click(function() {
+	jConfirm(ok, confirm, function(r) {
+		if(r){
+      $('.cho_txt').each(function(i){arr[i]=$(this).val();});
+      var param = {
+        q_txt:$('textarea').val(),
+        choice:arr,
+        score:$(this).siblings("input[type='radio']:checked").val(),
+      };
+    	$.ajax({type:'POST',dataType:'json',url:post_url,data:param,})
+      .always(function(data){
+        if(data['chk'] == 1){
+          if(enqu_id == 'new'){window.location.replace(data['url'])}
+          $('.next').fadeIn(1);
+          $('.success').fadeIn(10); 
+          $('.success').fadeOut(1000);
+          $('.color').css( 'background-color','#777')
+        }else{
+          $(".q_txt").text(data['q_txt'])
+          $(".q_txt").text(data['posted'])
+          $('.cho_1').text(data['cho_1'])
+          $('.cho_2').text(data['cho_2'])
+          $('.cho_3').text(data['cho_3'])
+          $('.cho_4').text(data['cho_4'])
+          $('.cho_5').text(data['cho_5'])
+//           alert(data['posted'])
+        }
+      });
+		}
+	});
+});
+
+</script>
+
+<style type="text/css">
+span  {color: red}
+a {align:right}
+--.title{box-shadow: 1px 1px 5px #aaa;}
+.success{display:none;color:green;}
+.next{display:none;}
+</style>

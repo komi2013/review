@@ -1,0 +1,46 @@
+<div>
+  <div><a class="run">run</a></div>
+<textarea>
+<?=__('suvery title');?>
+</textarea></br>
+<span class="err_title"></span>
+<div><button class="title">apply</button></div>
+<span class="success">success</span>
+</div>
+
+<script type="text/javascript">
+
+var post_url = '/<?=$lang;?>/in/enqutitle/<?=Request::current()->param('one');?>';
+var ok = 'are you sure';
+var confirm = 'confirmation';
+var post_arr = 'test';
+
+$('.title').click(function() {
+  var param = {
+    title  : $(this).parent('div').siblings('textarea').val(),
+  };
+  var cli = this;
+	$.ajax({type:'POST',dataType:'json',url:post_url,data:param,})
+  .always(function(data){
+    if(data['chk'] == 1){
+      window.location.replace('/<?=$lang;?>/review/' + data["url"] + '/')
+//     $('.success').fadeIn(1); 
+//     $('.success').fadeOut(1000);
+//       alert(data)
+//       $(cli).parent("div").parent("div").css( 'background-color','#777')
+    }else{
+      $(".err_title").text(data['title'])
+    }
+  });
+});
+
+
+</script>
+
+<style type="text/css">
+.err_title{color: red;}
+a {align:right}
+.title{box-shadow: 1px 1px 5px #aaa;}
+.success{display:none;color:green;}
+
+</style>

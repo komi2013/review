@@ -1,0 +1,19 @@
+<?php $enqu_id = Request::current()->param('one'); ?>
+<div class="body">
+  <p><?=$question->q_txt;?></p>
+  <p>you must answer! if you want to see statics</p>
+  <a href="<?='/'.$lang.'/ansglo/'.$enqu_id.'/profile/ ';?>">here we go</a>
+</div>
+
+<div class="test">
+<a>this is current</a>
+</div>
+
+<script type="text/javascript">
+$("<a>test</a>").appendTo(".test");
+</script>
+
+<style type="text/css">
+.title{box-shadow: 1px 1px 5px #aaa;}
+-- #box{display:none}
+</style>

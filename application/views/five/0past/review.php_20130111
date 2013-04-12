@@ -1,0 +1,108 @@
+<input type="text" value="run" id="title">
+
+<div class="test1">
+<p>title</p>
+<textarea>
+<?=$enqu->title;?>
+</textarea>
+
+<input type="submit" value="run" id="run">
+<input type="submit" value="update" id="send">
+</div>
+
+</br>
+</br>
+
+<?php $qu_loop = 0; foreach ($qu as $k => $d) { ?>
+<div>
+  
+  <textarea id="q_txt"><?=$d['q_txt'];?></textarea>
+  </br>
+  <?php  foreach ($d['choice'] as $k => $d) { ?>
+    <input type="text" id="cho_<?=$k;?>" value="<?=$d;?>">
+  <?php  } ?>
+  </br>
+  <a id="night">apply</a>
+  </br>  
+  </br>
+</div>
+<?php ++$qu_loop; } while ($qu_loop < 5) { ?>
+<div>
+  <textarea name="ask">sample <?=$qu_loop;?>   </textarea>
+  </br>
+  <input type="text" name="<?=$qu_loop;?>[txt]" value="very bad">
+  <input type="text" name="<?=$qu_loop;?>[txt]" value="bad">
+  <input type="text" name="<?=$qu_loop;?>[txt]" value="ok">
+  <input type="text" name="<?=$qu_loop;?>[txt]" value="good">
+  <input type="text" name="<?=$qu_loop;?>[txt]" value="very good">
+  </br>
+  <a id="night">apply</a>
+  </br>
+  </br>
+</div>
+<?php ++$qu_loop; } ?>
+
+<input type="submit" value = "submit">
+
+<input type="button" value="add form" id="add_btn">
+
+</form>
+
+<script type="text/javascript">
+
+var post_url = '/<?=$lang;?>/in/review/';
+var ok = 'are you sure';
+var confirm = 'confirmation';
+var post_arr = 'test';
+$('#send').click(function() {
+	jConfirm(ok, confirm, function(r) {
+		if(r){
+      var param = {
+        name : 'q txt',
+        arr : ["bad","hello","morning","pardon","good"],
+      };
+			$.ajax({
+				type: 'POST',
+        dataType:'text',
+				url: post_url,
+				data: param, 
+			})
+      .always(
+        function(data){alert(data)}
+      );
+		}
+	});
+});
+
+  var arr = [];
+$('div').children('a').click(function() {
+            
+//   data[i] = [];
+  $(this).siblings("input").each(function(i){
+//      console.log($(this).children("input").val());
+//         alert( $(this).children("input") );  // 'foo', 'bar'と表示
+    arr[i] = $(this).val();
+//     ++i;          
+  });
+  var param = {
+    q_txt  : $('#q_txt').val(),
+    choice : arr,
+
+//  { q_txt="   \n    хорошо  ", cho_0="bad"}
+// ["bad","hello","morning","pardon","good"]
+
+  };
+//   alert(param);
+  console.log(param);
+//   console.log(param['q_txt']);
+//   console.log(param['cho_0']);
+});
+
+
+$('#title').keypress(function (e) {
+    if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+        alert($(this).val());
+    }
+});
+
+</script>

@@ -1,0 +1,115 @@
+<input type="text" value="run" id="title">
+
+<div>
+<p>title</p>
+<textarea id="run">
+<?=HTML::chars($enqu->title);?>
+</textarea>
+
+<input type="submit" value="run">
+<input type="submit" value="update" id="send">
+</div>
+
+</br>
+
+<?php $qu_loop = 0; foreach ($qu as $k => $d) { ?>
+<div id="<?=$qu_loop;?>">
+  <textarea><?=HTML::chars($d['q_txt']);?></textarea></br>
+  </br>
+  <?php  foreach ($d['choice'] as $k => $d) { ?>
+    <input type="text" value="<?=HTML::chars($d);?>"></br>
+    <span class="cho_<?=$k+1;?>"></span></br>
+  <?php  } ?>
+  <a id="night">apply</a>
+  </br>  
+  </br>
+</div>
+<?php ++$qu_loop; } while ($qu_loop < 4) { ?>
+<div id="<?=$qu_loop;?>">
+  <textarea>sample <?=$qu_loop;?>   </textarea></br>
+  <span class="q_txt"></span></br>
+    <input type="text" value="very bad"> </br> <span class="cho_1"></span></br>
+    <input type="text" value="bad">      </br> <span class="cho_2"></span></br>
+    <input type="text" value="ok">       </br> <span class="cho_3"></span></br>
+    <input type="text" value="good">     </br> <span class="cho_4"></span></br>
+    <input type="text" value="very good"></br> <span class="cho_5"></span></br>
+  </br>
+  <a id="night">apply</a>
+  </br>
+  </br>
+</div>
+<?php ++$qu_loop; } ?>
+
+<div id="<?=$qu_loop;?>">
+  <textarea>sample <?=$qu_loop;?>   </textarea></br>
+  <span class="txt_sin"></span></br>
+  <a id="night">apply</a></br>
+</div>
+<input type="submit" value = "submit">
+
+<input type="button" value="add form" id="add_btn">
+
+
+<script type="text/javascript">
+
+var post_url = '/<?=$lang;?>/in/review/<?=Request::current()->param('one');?>';
+var ok = 'are you sure';
+var confirm = 'confirmation';
+var post_arr = 'test';
+$('#send').click(function() {
+  $('.cho_1').text('test');
+});
+
+var arr = [];
+$('div').children('a').click(function() {
+//   $(this).siblings("table").find("input").each(function(i){
+  $(this).siblings("input").each(function(i){
+    arr[i] = $(this).val();
+  });
+//   console.log($(this).parent('div').attr('id'));
+  var param = {
+    q_txt  : $(this).siblings('textarea').val(),
+    choice : arr,
+    q_num  : $(this).parent('div').attr('id'),
+  };
+  var cli = this;
+	$.ajax({
+		type: 'POST',
+    dataType:'json',
+		url: post_url,
+		data: param, 
+	})
+  .always(function(data){
+    $(cli).siblings(".q_txt").text(data['q_txt'])
+    $(cli).siblings('.cho_1').text(data['cho_1'])
+    $(cli).siblings('.cho_2').text(data['cho_2'])
+    $(cli).siblings('.cho_3').text(data['cho_3'])
+    $(cli).siblings('.cho_4').text(data['cho_4'])
+    $(cli).siblings('.cho_5').text(data['cho_5'])
+    if(data['chk'] == 0){
+      alert('sucess')
+      $(cli).parent("div").css( 'background-color','#777')
+    }
+//     else(
+//       $('#run').text('test')
+// 		  alert(data)
+//       window.location.replace(data["url"])
+// console.log(data)
+// $('#3').css( 'background-color','#777')
+//     )
+  });
+
+//   .fadeOut(
+//     "slow",
+//     function(){alert("フェードアウト完了")}
+// );
+
+
+});
+
+</script>
+
+<style type="text/css">
+    span  {color: red}
+    h2 {color: blue; font-size: 120%}
+</style>
