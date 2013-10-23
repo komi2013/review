@@ -1,0 +1,155 @@
+
+<?=View::factory('csrf_pc')?>
+
+<?php $i = 0; foreach($arr_qu as $k => $d) { ++$i; ?>
+
+<div id="<?=$d['q_txt']?>" >
+  <table>
+   <tr><td><textarea id="<?=$i?>_q_txt_in"><?=H::c($d['q_txt'])?></textarea></td></tr>
+   <tr><td> <span id="<?=$i?>_q_txt_out"></span> </td></tr>
+  </table>
+  <table>
+    <tr>
+<?php  foreach ($d['cho'] as $kk => $dd) { ++$kk; ?>
+    <td><input type="text" value="<?=H::c($dd)?>" class="<?=$i?>_cho_in"></td>
+<?php  } ?>
+    </tr>
+    <tr>
+<?php  foreach ($d['cho'] as $kk => $dd) { ++$kk; ?>
+    <td><span id="<?=$i?>_<?=$kk?>_cho_out"></span></td>
+<?php  } ?>
+    </tr>
+  </table>
+  <br>
+  <button>送信</button> &nbsp; &nbsp;<span id="<?=$i?>_success"></span>
+  <br>  
+  <br>  
+
+</div>
+
+<?php }
+
+while($i < 4) { ++$i; ?>
+
+<div id="<?=$i?>" >
+  <table>
+   <tr><td><textarea id="<?=$i?>_q_txt_in">質問内容　<?=$i?></textarea></td></tr>
+   <tr><td> <span id="<?=$i?>_q_txt_out"></span> </td></tr>
+  </table>
+  <table>
+    <tr>
+<?php $ii = 0; while($ii < 5) { ++$ii; ?>
+    <td><input type="text" value="選択　<?=$ii?>" class="<?=$i?>_cho_in"></td>
+<?php  } ?>
+    </tr>
+    <tr>
+<?php $ii = 0; while($ii < 5) { ++$ii; ?>
+    <td><span id="<?=$i?>_<?=$ii?>_cho_out"></span></td>
+<?php  } ?>
+    </tr>
+  </table>
+  <br>
+  <button>送信</button> &nbsp; &nbsp;<span id="<?=$i?>_success"></span>
+  <br>  
+  <br>  
+
+</div>
+
+
+<?php } ?>
+
+<div id="5">
+  <textarea><?= isset($arr[5]) ? H::c($arr[5]['q_txt']) : '質問内容　5'?></textarea></br>
+  <span ></span>
+  <button >送信</button>
+</div>
+
+<a href="/maker/run/?enqu=<?=$_GET['enqu']?>">配信</a>
+
+<script type="text/javascript">
+
+var post_url = '/maker/review4/';
+var enqu = '<?=$_GET["enqu"]?>';
+var success = '更新しました';
+var arr = [];
+$('div').children('button').click(function() {
+  var thisq = $(this).parent('div').attr('id');
+  console.log(thisq);
+  console.log($('#'+thisq+'_q_txt_in').val());
+//   $(this).siblings('div').each(function(i){
+//     arr[i] = $(this).val();
+//   });
+  $('.'+thisq+'_cho_in').each(function(i){
+    arr[i] = $(this).val();
+  });
+
+  var param = {
+    csrf   : $('#csrf input').val(),
+    enqu   : enqu,
+    q_txt  : $('#'+thisq+'_q_txt_in').val(),
+    q_num  : thisq,
+    choice : arr
+  };
+  var click = this;
+  var disp = eval($(this).parent('div').attr('id')) + 1;
+  $.post(post_url,param,function(res) {
+    if(res['chk'] == 1){
+      $('#csrf input').val(res['csrf']);
+      $('#'+thisq+'_success').text(success); 
+      $('#'+thisq+'_success').fadeIn(10); 
+      $('#'+thisq+'_success').fadeOut(1000);
+      $('#'+thisq).css( 'background-color','#e0ffff');
+      $('#'+disp).css("display", "block");
+
+      $('#'+thisq+'_q_txt_out').text('');
+      $('#'+thisq+'_1_cho_out').text('');
+      $('#'+thisq+'_2_cho_out').text('');
+      $('#'+thisq+'_3_cho_out').text('');
+      $('#'+thisq+'_4_cho_out').text('');
+      $('#'+thisq+'_5_cho_out').text('');
+    }else{
+      $('#'+thisq+'_q_txt_out').text(res['q_txt']);
+      $('#'+thisq+'_1_cho_out').text(res['cho_1']);
+      $('#'+thisq+'_2_cho_out').text(res['cho_2']);
+      $('#'+thisq+'_3_cho_out').text(res['cho_3']);
+      $('#'+thisq+'_4_cho_out').text(res['cho_4']);
+      $('#'+thisq+'_5_cho_out').text(res['cho_5']);
+    }
+  }, "json")
+});
+
+var post_q_txt = '/maker/freetxt4/';
+$('.txt_sin').click(function() {
+  var param = {
+    enqu   : enqu,
+    q_txt  : $(this).siblings('textarea').val(),
+//     txt_sin  : "for isset",
+//     q_num  : $(this).parent('div').attr('id'),
+  };
+  var cli = this;
+	$.ajax({type:'POST',dataType:'json',url:post_q_txt,data:param})
+  .always(function(data){
+    if(data['chk'] == 1){
+      $(cli).siblings('.success').fadeIn(10); 
+      $(cli).siblings('.success').fadeOut(1000);
+      $(cli).parent("div").css( 'background-color','#e0ffff')
+    } else {
+      $(cli).siblings(".freetxt").text(data['q_txt'])
+    }
+  });
+});
+
+</script>
+
+<style type="text/css">
+span{
+ color: red
+}
+.success{
+ display: none;
+ color: green;
+}
+.qu_disp_none{
+ display: none;
+}
+</style>

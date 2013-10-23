@@ -1,0 +1,17 @@
+/*
+span{
+ color: red;
+}
+
+#success{
+ color:green;
+}
+*/
+
+#run{
+ cursor:pointer;
+ background-color:#F5E5F3;
+}
+#show{
+ cursor:pointer
+}

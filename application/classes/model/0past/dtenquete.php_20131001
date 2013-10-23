@@ -1,0 +1,12 @@
+<?php defined('SYSPATH') or die('No direct script access.');
+class Model_DtEnquete extends ORM{
+
+	protected static $_table_name = 'dt_enquete';
+
+  public function get_new_id() 
+  {
+    $res = DB::query("select nextval('dt_enquete_id_seq')")->execute();
+    return $res[0]['nextval'];
+  }
+}
+?>

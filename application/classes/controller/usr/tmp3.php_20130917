@@ -1,0 +1,33 @@
+<?php
+class Controller_Usr_Tmp3 extends Controller
+{
+	public function action_index()
+	{
+    $val = Validation::forge('my_validation');
+    $val->add_field('name', $_POST['name'], 'required|min_length[3]|max_length[10]');
+    // run validation on just post
+    if ($val->run())
+    {
+      Session::set('pv_u_id','tmp');
+      Cookie::set('name', $_POST['name']);
+      Cookie::set('img', '');
+  
+      $usr = new Model_Usr();
+      $usr->col['pv_u_id'] = 'tmp';
+      $usr->col['provider'] = 3;
+      $usr->col['name'] = $_POST['name'];
+      $usr->col['img'] = '';
+      $usr->reg_login();
+      echo '{"chk":1}';
+    }
+    else
+    {
+        // validation failed
+        echo '{"tmp_reg":"3文字以上10文字以下にしてください。"}';
+//         $errors = $val->error();
+//         echo '<pre>';
+// //         var_dump($errors);
+//         echo '</pre>';
+    }
+	}
+}

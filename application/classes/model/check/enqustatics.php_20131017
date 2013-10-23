@@ -1,0 +1,40 @@
+<?php defined('SYSPATH') or die('No direct script access.');
+class Model_Check_EnquStatics extends Model {
+
+	public static function tpl($enqu_id,$session,$view)
+	{
+    $enqu = ORM::factory('V1_DtEnquete')
+      ->where('id', '=', $enqu_id)
+      ->find();
+
+    if ($enqu->u_id != $session->get('u_id'))
+    {
+      $view->content = View::factory('tpl/err_'.$view->device);
+      $view->content->msg = 'アクセスできません';
+      die($view); 
+    }
+    return $enqu;
+	}
+// 	public static function json($enqu_id,$session)
+// 	{
+//     $enqu = ORM::factory('V1_DtEnquete')
+//       ->where('id', '=', $enqu_id)
+//       ->find();
+// 
+//     if ($enqu->u_id != $session->get('u_id'))
+//     {
+//       $res['chk'] = 4;
+//       $res['err'] = 'アクセスできません';
+//       die(json_encode($res)); 
+//     }
+//     if ($enqu->status > 0)
+//     {
+//       $res['chk'] = 5;
+//       $res['err'] = '配信中なので編集できません';
+//       die(json_encode($res)); 
+//     }
+//     return $enqu;
+// 	}
+}
+
+?>

@@ -1,0 +1,32 @@
+<?php defined('SYSPATH') OR die('No direct access allowed.');
+abstract class Controller_Tpl extends Controller_Template {
+//   public function __construct()
+	public function before()
+	{
+// 		parent::tpl();
+//     echo 'test';
+//     $slash = substr($_SERVER["REQUEST_URI"], -1);
+//     if ($slash != "/") $this->request->redirect($_SERVER["REQUEST_URI"]."/ ");
+    $this->session = Session::instance();
+//     $this->pv_u_id = $this->session->get('pv_u_id');
+    $this->session->set('pv_u_id',91);
+    $this->session->set('u_id',35);
+    $this->pv_u_id = $this->session->get('pv_u_id');
+    $this->session->set('posted', 1);
+		$this->template = View::factory('tpl_1');
+  	View::bind_global('page_title', $this->page_title);
+		$this->lang = Cookie::get('lang');
+		I18n::lang($this->lang);
+//     if (isset($_GET['enqu_id']))
+//     {
+//       $this->enqu_id = $_GET['enqu_id'];
+//     }
+//     else
+//     {
+//       die('no enqu_id arg');
+//     }
+//     $promo = ORM::factory('promo')->where('lang', '=', $this->lang)->find_all();
+//     $this->template->pr_tpl = View::factory('/five/pr_tpl');
+//     $this->template->pr_tpl->promo = $promo;
+  }
+}

@@ -1,0 +1,80 @@
+<?php
+class Controller_Mypage_Qtxt3 extends Controller_Rest {
+	public function action_index()
+	{
+//     if (isset($_POST['csrf']) == FALSE OR Cookie::get('csrf') != $_POST['csrf'])
+//     {
+//       $res['chk'] = 2;
+//       $res['csrf'] = 'csrf token is wrong';
+//       die($this->response($res));
+//     }
+//     Session::set('u_id',1);
+		if (!Session::get('u_id'))
+    {
+      $res['chk'] = 3;
+      $res['new'] = 'no session u_id';
+      die($this->response($res));
+    }
+
+    $enqu = Model_DtEnquete::find('first', array(
+      'where' => array(
+        array('id', $_POST['enqu']),
+//         array('provider', 1),
+      ),
+//       'order_by' => array('id' => 'desc'),
+    ));
+
+    if ($enqu->u_id != Session::get('u_id')) die('you can not access this enquete');
+
+    $question = Model_DtQuestion::find('first', array(
+      'where' => array(
+        array('enqu_id', $_POST['enqu']),
+        array('q_num', 5),
+      ),
+    ));
+
+    if (isset($question->id))
+    {
+      $qu_id = $question->id;
+    }
+    else
+    {
+      $question = new Model_DtQuestion();
+      $qu_id = $question->get_new_id();
+      $question->id = $qu_id;
+    }
+		try
+  	{
+  		$question->q_txt = $_POST['q_txt'];
+  		$question->enqu_id = $_POST['enqu'];
+      $question->qtype = 5;
+  		$question->q_num = 5;
+      $question->limit_ans = 10000;
+      $question->q_pt = 0;
+   		$question->save();
+
+      Cookie::set('csrf', 'posted');
+      $res['chk'] = 1;
+      $res['res'] = 'success';
+      die($this->response($res));
+    }
+    catch (Orm\ValidationFailed $e)
+    {
+      $res['chk'] = 2;
+      $res['res'] = $e->getMessage();
+      die($this->response($res));
+    }
+
+
+	}
+	public function err_msg()
+	{
+    foreach ($this->message as $k => $d)
+    {
+        $this->err[$k] = preg_replace("/q_txt/",__('question'),$d);
+        ++$this->err['chk'];
+    }
+    return json_encode($this->err);
+  }
+}
+//end

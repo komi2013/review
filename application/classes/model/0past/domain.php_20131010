@@ -1,0 +1,17 @@
+<?php defined('SYSPATH') or die('No direct script access.');
+class Model_Domain extends Model {
+
+  public $users_key = "review";
+  public $users = "https://users.komahana.info/";
+  public $end_key = "end";
+
+	public $fb_id = 'client_id=1412377278985770&';
+  public $fb_secret = 'client_secret=08ec0d68f9d1096d82776f687b3d116a&';
+
+	public $twitter_key = '6AjeLHNvdrWYc297oIKpA';
+  public $twitter_secret = 'OxeFNJdepB9F4JHzuix6lrtpcqYspqv5U2a3wVkD0';
+  public $tw_callbak = 'https://review.komahana.info/ja/in/tw/callback/';
+
+}
+
+?>

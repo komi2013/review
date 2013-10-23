@@ -1,0 +1,13 @@
+<?php defined('SYSPATH') or die('No direct script access.');
+class Model_Tpl_Csrf extends Model {
+	public static function generate()
+	{
+    $csrf = Text::random('alnum', 16);
+    Cookie::set('csrf', $csrf);
+    
+    return $csrf;
+	}
+
+}
+
+?>

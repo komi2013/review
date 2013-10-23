@@ -1,0 +1,70 @@
+<?php defined('SYSPATH') or die('No direct access allowed.');
+
+class Model_V1_DtUsr extends ORM {
+
+	public $col = array(
+		'name' => '',
+		'provider' => 0,
+		'pv_u_id' => 0,
+		'img' => '',
+	);
+
+  protected $_table_name = 'dt_usr';
+
+  public function reg_login() 
+  {
+    $usr = ORM::factory('T1_DtUsr')->where('pv_u_id', '=', $this->col['pv_u_id'])
+        ->where('provider', '=', $this->col['provider'])->find();
+    if ($usr->loaded())
+    {
+      $usr->name = $this->col['name'];
+      $usr->img = $this->col['img'];
+      $usr->save();
+    }
+    else
+    {
+      $res = DB::query("select nextval('dt_usr_id_seq')")->execute();
+      $u_id = $res[0]['nextval'];
+      $usr->pv_u_id = $this->col['pv_u_id'];
+      $usr->name = $this->col['name'];
+      $usr->img = $this->col['img'];
+      $usr->id = $u_id;
+      $usr->provider = $this->col['provider'];
+      $usr->save();
+    }
+    $session = Session::instance('database');
+    session_regenerate_id(TRUE);    
+    $session->set('u_id',$usr->id);
+    $session->set('pv_u_id',$this->col['pv_u_id']);
+    Cookie::set('name', $this->col['name']);
+    Cookie::set('img', $this->col['img']);
+  }
+
+  protected $_primary_key = 'id';
+  public function rules()
+  {
+    return array(
+      'pv_u_id' => array(
+        array('not_empty'),
+        array('digit'),
+      ),
+    );
+  }
+
+	public function get_new_id()
+	{
+		$sql = "select nextval('dt_usr_id_seq')";
+		$query = DB::query(Database::SELECT, $sql);
+		$res = $query->execute();
+		return $res['nextval']['nextval'];
+	}
+// 	public function getnextval()
+// 	{
+// 		$sql = "select nextval('usr_id_seq')";
+// 		$query = DB::query(Database::SELECT, $sql);
+// 		$res = $query->execute();
+// 		return $res['nextval']['nextval'];
+// // 		return $newid;
+// 	}
+
+}

@@ -1,0 +1,25 @@
+<?php
+class Controller_Usr_Twin extends Controller
+{
+	public function action_index()
+	{
+    require APPPATH.'vendor/tw/twitteroauth/twitteroauth.php';
+    Config::load('domain');
+
+    $client_id = Config::get('tw_id');
+    $client_secret = Config::get('tw_secret');
+//     echo 
+//     die();
+    $tw_callbak = Config::get('tw_callbak');
+
+    $to = new TwitterOAuth($consumer_key,$consumer_secret);
+    $tok = $to->getRequestToken($tw_callbak);
+
+    Session::set('request_token',$tok['oauth_token']);
+    Session::set('request_token_secret',$tok['oauth_token_secret']);
+    
+    $url = $to->getAuthorizeURL($tok['oauth_token']);
+
+    $this->request->redirect($url);
+	}
+}

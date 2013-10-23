@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') or die('No direct script access.');
+//6666
 require SYSPATH.'classes/kohana/core'.EXT;
 if (is_file(APPPATH.'classes/kohana'.EXT))
 {
@@ -8,7 +9,7 @@ else
 {
 	require SYSPATH.'classes/kohana'.EXT;
 }
-date_default_timezone_set('America/Chicago');
+date_default_timezone_set('Asia/Tokyo');
 setlocale(LC_ALL, 'en_US.utf-8');
 spl_autoload_register(array('Kohana', 'auto_load'));
 ini_set('unserialize_callback_func', 'spl_autoload_call');
@@ -34,8 +35,13 @@ Kohana::modules(array(
 	));
 
 Cookie::$salt = 'QoQfRPscdI';
-Route::set('default', '<lang>(/<directory>)/<controller>(/<one>(/<two>(/<three>)))',
-  array(
-    'lang' => '(ja|en|es|ar|zh|ko)',
-    'directory' => '(in)',
-  ));
+Cookie::$expiration = 604800;
+
+$uri = preg_split("/[\/]+/", $_SERVER['REQUEST_URI']);
+
+Route::set('default', '(<directory>(/<controller>(/<action>)))')
+->defaults(array(
+    'directory' => 'home',
+    'controller' => $uri[1] ?: 'home',
+    'action'     => 'index',
+));

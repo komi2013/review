@@ -1,0 +1,117 @@
+<?php
+class Controller_Mypage_Review3 extends Controller_Rest {
+	public function action_index()
+	{
+//     if (isset($_POST['csrf']) == FALSE OR Cookie::get('csrf') != $_POST['csrf'])
+//     {
+//       $res['chk'] = 2;
+//       $res['csrf'] = 'csrf token is wrong';
+//       die($this->response($res));
+//     }
+//     Session::set('u_id',1);
+		if (!Session::get('u_id'))
+    {
+      $res['chk'] = 3;
+      $res['new'] = 'no session u_id';
+      die($this->response($res));
+    }
+
+    $enqu = Model_DtEnquete::find('first', array(
+      'where' => array(
+        array('id', $_POST['enqu']),
+//         array('provider', 1),
+      ),
+//       'order_by' => array('id' => 'desc'),
+    ));
+
+    if ($enqu->u_id != Session::get('u_id')) die('you can not access this enquete');
+
+//     $db = Database::instance();
+//     $db->begin();
+// 		$this->message = array();
+//     $error['chk'] = 1; // 1 is no error
+
+// 		$question = ORM::factory('question')->where('enqu_id', '=', $this->enqu_id)->where('q_num', '=', $_POST['q_num'])->find();
+
+    $question = Model_DtQuestion::find('first', array(
+      'where' => array(
+        array('enqu_id', $_POST['enqu']),
+        array('q_num', $_POST['q_num']),
+      ),
+    ));
+
+    if (isset($question->id))
+    {
+      $qu_id = $question->id;
+    }
+    else
+    {
+      $question = new Model_DtQuestion();
+      $qu_id = $question->get_new_id();
+      $question->id = $qu_id;
+    }
+
+		try
+  	{
+  		$question->q_txt = $_POST['q_txt'];
+  		$question->enqu_id = $_POST['enqu'];
+      $question->qtype = 1;
+  		$question->q_num = $_POST['q_num'];
+      $question->limit_ans = 10000;
+      $question->q_pt = 0;
+   		$question->save();
+    }
+    catch (Orm\ValidationFailed $e)
+    {
+//       $view->set('errors', $e->getMessage(), false);
+      $res['chk'] = 2;
+      $res['valid'] = $e->getMessage();
+      die($this->response($res));
+    }
+        
+    $this->err['chk'] = 1;
+    $txt = '';
+//     $pre_txt = '';
+    foreach ($_POST['choice'] as $k => $d)
+    { ++$k;
+      $this->err['cho_'.$k] = '';
+//       echo $d;
+      if (strlen($d) / 3 > 20)
+      {
+        $this->err['cho_'.$k] .= 'choice must not be more than 20 character';
+        ++$this->err['chk'];
+      }
+      elseif ($d == '')
+      {
+        $this->err['cho_'.$k] .= 'choice must not be empty';
+        ++$this->err['chk'];
+      }
+      $txt .= $d."\n";
+    }
+//     $res = $this->err_msg();
+    if ($this->err['chk'] == 1)
+    {
+      $qucho = new Model_DtQucho();
+      $qucho->deladd($txt,$qu_id);
+//       $db->commit();
+      Cookie::set('csrf', 'posted');
+      $this->err['res'] = 'success';
+      echo json_encode($this->err);
+    }
+    else
+    {
+//       $db->rollback();
+      echo json_encode($this->err);
+    }
+	}
+	public function err_msg()
+	{
+    foreach ($this->message as $k => $d)
+    {
+        $this->err[$k] = preg_replace("/q_txt/",__('question'),$d);
+        ++$this->err['chk'];
+    }
+    return json_encode($this->err);
+  }
+}
+//end

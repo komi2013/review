@@ -51,4 +51,12 @@ return array(
   'Review' => 'レビュー',
   'thanks for answer' => '回答ありがとうございました',
   'you must create 5 question' => '選択肢5つ作成してください',
+
+// since 20131017 model/check/
+  'no access right' => 'アクセスできません',
+  'it is running, unable to edit' => '配信中なので編集できません',
+  ' is wrong' => 'が違います',
+  ' is no argument' => 'の引数がありません',
+  ' is no session value' => 'のセッションがありません',
+  'still not delivery yet' => 'まだ配信されていません',
 );

@@ -1,0 +1,16 @@
+<?php defined('SYSPATH') OR die('No direct access allowed.');
+class Controller_Game extends Controller_All {
+
+	public function action_index()
+	{
+    parent::all();
+    $func = $this->request->param('one');
+    $this->$func();
+	}
+	public function rank()
+	{
+    
+  }
+
+}
+//end

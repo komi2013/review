@@ -1,0 +1,35 @@
+<?php
+class Controller_Usr_Tmp3 extends Controller_Rest
+{
+	public function post_index()
+	{
+    $usr = new Model_DtUsr();
+    if (!\Security::check_token())
+    {
+      $res['chk'] = 2;
+      $res['csrf'] = 'csrf token is wrong';
+      die($this->response($res));
+    }
+
+    try
+    {
+      $usr->name = $_POST['name'];
+//       $usr->url = Input::param('url');
+      $usr->save();
+//       echo '{"chk":1}';
+//       $res = array(
+//           "chk" => 1,
+//         );
+      $res['chk'] = 1;
+//       Response::redirect('articles');
+    }
+    catch (Orm\ValidationFailed $e)
+    {
+//       $view->set('errors', $e->getMessage(), false);
+      $res['chk'] = 2;
+      $res['name'] = $e->getMessage();
+    }
+
+    $this->response($res);
+	}
+}

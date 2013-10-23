@@ -1,0 +1,99 @@
+<?php defined('SYSPATH') OR die('No direct access allowed.');
+class Controller_In_Tw extends Controller {
+	public function action_index()
+	{
+    $func = $this->request->param('one');
+    $this->$func();
+	}
+
+	public function oauth()
+	{
+    $session = Session::instance();
+//     require Kohana::find_file('vendor', 'tw/twitteroauth/twitteroauth');
+    require APPPATH.'vendor/tw/twitteroauth/twitteroauth.php';
+    Config::load('domain');
+    $consumer_key = Config::get('fb_id');
+    $consumer_secret = Config::get('fb_secret');
+//     $domain = new Model_Domain;
+//     $consumer_key = $domain->twitter_key;
+//     $consumer_secret = $domain->twitter_secret;
+
+    $to = new TwitterOAuth($consumer_key,$consumer_secret);
+    $tok = $to->getRequestToken($domain->tw_callbak);
+//     echo Debug::vars($tok);
+    $session->set('request_token',$tok['oauth_token']);
+    $session->set('request_token_secret',$tok['oauth_token_secret']);
+    
+    $url = $to->getAuthorizeURL($tok['oauth_token']);
+//     echo Debug::vars($url);
+    $this->request->redirect($url);
+	}
+
+	public function callback()
+	{
+    $session = Session::instance();
+    require Kohana::find_file('vendor', 'tw/twitteroauth/twitteroauth');
+    $domain = new Model_Domain;
+    $consumer_key = $domain->twitter_key;
+    $consumer_secret = $domain->twitter_secret;
+    
+    $verifier = $_GET['oauth_verifier'];
+    
+    $to = new TwitterOAuth($consumer_key,$consumer_secret,$session->get('request_token'),$session->get('request_token_secret'));
+    $access_token = $to->getAccessToken($verifier);
+
+    echo Debug::vars($access_token);
+
+    $to->host = 'https://api.twitter.com/1.1/'; // By default library uses API version 1.  
+    $profile = $to->get('/users/show.json?screen_name='.$access_token['screen_name'].'&user_id='.$access_token['user_id']);
+    
+    echo Debug::vars($profile);
+
+    $session->set('oauth_token',$access_token['oauth_token']);
+    $session->set('oauth_token_secret',$access_token['oauth_token_secret']);
+    $session->set('screen_name',$access_token['screen_name']);
+    $session->set('pv_u_id',$access_token['user_id']);
+
+    Cookie::set('name', $access_token['screen_name']);
+    Cookie::set('img', $profile->profile_image_url_https);
+
+    $usr = ORM::factory('usr')->where('pv_u_id', '=', $access_token['user_id'])->where('provider', '=', 2)->find();
+//     echo View::factory('profiler/stats');
+//     die('test');
+    if ($usr->loaded())
+    {                                                            
+      $session->set('u_id',$usr->id);
+      $usr->name = $access_token['screen_name'];
+      $usr->img = $profile->profile_image_url_https;
+//       $usr->date = date("Y-m-d", time());
+      $usr->save();
+      $this->request->redirect('/ja/myreview/ ');
+    }
+    else
+    {
+      $model_usr = new Model_Usr;
+      $u_id = $model_usr->getnextval();
+
+      $usr->pv_u_id = $access_token['user_id'];
+//       $usr->stage = 1;
+      $usr->name = $access_token['screen_name'];
+      $usr->img = $profile->profile_image_url_https;
+      $usr->id = $u_id;
+      $usr->provider = 2;
+      $usr->save();
+      $session->set('u_id',$u_id);
+      $this->request->redirect('/ja/myreview/ ');
+    }
+	}
+	public function test()
+	{
+//       $request = Request::factory('usr/fb/nothing');
+//       $response = Request::factory('usr/fb/nothing')->execute();
+//       $fb = new Controller_Usr_Fb($request,$response);
+//       $fb = new Controller_Usr_Fb;
+//       $fb->action_nothing();
+    echo 'trest';
+	}
+
+}
+//end

@@ -1,0 +1,79 @@
+<?php defined('SYSPATH') OR die('No direct access allowed.');
+class Controller_Answer_End extends Controller_Template {
+	public function action_index()
+	{
+    $session = Model_Access_Session::usr_chk();
+    Model_Access_Session::end_qu_chk($session);
+
+//     $this->u_id = $session->get('u_id');
+// 		$this->q_num = $this->request->param('two');
+    $enquete = ORM::factory('T1_DtEnquete')
+      ->where('id', '=', $session->get('enqu'))
+      ->find();
+
+		$sql='SELECT * FROM sm_u_ans WHERE enqu_id = :enqu_id AND u_id = :u_id';
+    
+    
+    $enqu_id = $session->get('enqu');
+    $u_id = $session->get('u_id');
+		$query = DB::query(Database::DELETE, $sql)
+			->bind(':enqu_id', $enqu_id)
+      ->bind(':u_id', $u_id)
+      ;
+		$arr_sm_u_ans = $query->execute();
+    echo Debug::vars($arr_sm_u_ans);
+//     if (!isset($arr_sm_u_ans[0][id]))
+//     {
+//       die('you must answer first');
+//     }
+    
+    $this->template = Model_Tpl_Outer::call();
+    $this->template->content = View::factory('answer/end_'.$this->template->device);
+    $this->template->content->enquete = $enquete;
+    $this->template->title = $enquete->title;
+  }
+  public function qucho()
+  {    
+    $question = ORM::factory('question')->where('enqu_id', '=', $this->enqu_id)->order_by('q_num')->find_all();
+    
+    foreach ($question as $k => $d)
+    {
+      if ($d->q_num == 5)
+      {
+        $antxt_txt  = $d->q_txt;
+      }
+      else
+      {
+        $qucho = ORM::factory('qucho')->where('p_qu_id', '=', $d->id)->order_by('id')->find_all();
+        $denominator = 0;
+        $sm_q_answer = 0;
+        foreach ($qucho as $kk => $dd)
+        {
+          $denominator = $denominator + $dd->sum;
+          $statics[$d->q_num]['sum'][$dd->txt] = $dd->sum;
+          $sm_q_answer = $sm_q_answer + $dd->sum;
+        }  
+        $statics[$d->q_num]['q_txt']  = $d->q_txt;
+        $statics[$d->q_num]['denominator']  = $denominator;
+         
+      }
+      
+    }
+		$this->template->content = View::factory('five/end_review');
+		$this->template->content->statics = $statics;
+    $this->template->content->antxt_txt = $antxt_txt;
+    $this->template->content->login = $this->session->get('pv_u_id');
+    $this->template->content->u_answered = $sm_q_answer;
+	}
+  public function antxt()
+  {
+    if (!$this->session->get('pv_u_id')) die('you must login to see this answers');
+    $this->enquete = ORM::factory('enquete')->where('id', '=', $this->enqu_id)->find();
+    $question = ORM::factory('question')->where('enqu_id', '=', $this->enqu_id)->find();
+    $antxt = ORM::factory('antxt')->where('p_qu_id', '=', $question->id)->order_by('id','desc')->find_all();
+		$this->template->content = View::factory('five/antxt');
+    $this->template->content->q_txt = $question->q_txt;
+    $this->template->content->antxt = $antxt;
+	}
+}
+//end

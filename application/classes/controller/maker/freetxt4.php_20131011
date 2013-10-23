@@ -1,0 +1,18 @@
+<?php defined('SYSPATH') OR die('No direct access allowed.');
+class Controller_Maker_Freetxt4 extends Controller {
+	public function action_index()
+	{
+    Model_Access_Session::maker_chk_json();
+
+    $question = new Model_T1_DtQuestion;
+    $question->review['type'] = 5;
+    $question->review['transaction'] = 2;
+    $question->review['number'] = 5;
+    $res = $question->review_post();
+    
+//     $res = Model_T1_DtQuestion::type5_save(1);
+    
+    echo json_encode($res);
+	}
+}
+//end

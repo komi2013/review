@@ -1,0 +1,30 @@
+<?php defined('SYSPATH') or die('No direct script access.');
+class Model_Tpl_Basic extends Model {
+//   public static $tpl_template = 'tpl/template';
+//   public static $tpl_err = 'tpl/err';
+
+	public static function call()
+	{
+    $arr_phone = Request::user_agent(array('mobile', 'fp'));
+    if ($arr_phone['mobile'])
+    {
+      $view = View::factory('template_sp');
+      $view->device = 'sp';
+    }
+    elseif ($arr_phone['fp'])
+    {
+      $view = View::factory('template_fp');
+      $view->device = 'fp';
+    }
+    else
+    {
+      $view = View::factory('template_pc');
+      $view->device = 'pc';
+    }
+    $view->title = 'タイトル';
+    return $view;
+	}
+
+}
+
+?>

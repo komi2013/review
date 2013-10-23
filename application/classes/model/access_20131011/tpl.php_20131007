@@ -1,0 +1,9 @@
+<?php defined('SYSPATH') or die('No direct script access.');
+class Model_Before_Tpl extends Model {
+  public static $tpl_template = 'tpl/template';
+  public static $tpl_err = 'tpl/err';
+
+
+}
+
+?>

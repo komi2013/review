@@ -1,0 +1,17 @@
+<?php defined('SYSPATH') OR die('No direct access allowed.');
+class Controller_Maker_Test extends Controller {
+	public function action_index()
+	{
+    $arr_cho = array('いち','に','さん','よん','ご');
+    
+    $query = DB::insert('dt_qucho', array('qu_id', 'txt'));
+    $qu_id = 1;
+    foreach ($arr_cho as $k => $d)
+    {
+      $query->values(array($qu_id, $d));
+    }
+    
+    $query->execute();
+	}
+}
+//end

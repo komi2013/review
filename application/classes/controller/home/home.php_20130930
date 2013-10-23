@@ -1,0 +1,26 @@
+<?php defined('SYSPATH') OR die('No direct access allowed.');
+class Controller_Home_Home extends Controller_All {
+
+	public function action_index()
+	{
+//     parent::all();
+
+    echo 'test';
+    $this->session = Session::instance();
+//     $this->pv_u_id = $this->session->get('pv_u_id');
+//     $this->session->set('pv_u_id',91);
+//     $this->session->set('u_id',35);
+//     $this->pv_u_id = $this->session->get('pv_u_id');
+//     $this->session->set('posted', 1);
+		$template = View::factory('tpl_1/template');
+//   	View::bind_global('page_title', $this->page_title);
+// 		$this->lang = Cookie::get('lang');
+// 		I18n::lang($this->lang);
+
+
+    $template->content = View::factory('home/home');
+//     $this->template->content->lang = $this->lang;
+	}
+
+}
+//end

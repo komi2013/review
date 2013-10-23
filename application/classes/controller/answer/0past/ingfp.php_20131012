@@ -1,0 +1,68 @@
+<?php defined('SYSPATH') OR die('No direct access allowed.');
+class Controller_Answer_IngFp extends Controller_Template {
+	public function action_index()
+	{
+    $session = Model_Access_Session::usr_chk();
+
+    $end_chk_qu = ORM::factory('T1_DtQuestion')
+      ->where('enqu_id', '=', $session->get('enqu'))
+      ->order_by('number','asc')
+      ->find_all();
+
+    $nextq = $session->get('nextq');
+    $chk_nextq = 1;
+    foreach ($end_chk_qu as $k => $d)
+    {
+//       echo $d->number.' == '.$nextq;
+      if ($d->number == $nextq)
+      {
+        $question = $d;
+        $chk_nextq = 2;
+      }
+      $end_q_num = $d->number; 
+    }
+    if ($chk_nextq == 1 AND $end_q_num == $nextq -1)
+    {
+      $session->set('nextq', 'end');
+      $this->request->redirect('/answer/end/ ');
+    }
+    $this->template = Model_Tpl_Outer::call();
+    $this->template->title = $question->txt;
+    if ($question->type == 1)
+    {
+      error_reporting(E_ALL & E_NOTICE);
+      $ancho = ORM::factory('T1_DtAncho')
+        ->where('qu_id', '=', $question->id)
+        ->where('u_id', '=', $session->get('u_id'))
+        ->find();
+      if ($ancho->loaded())
+      {
+        $session->set('nextq', $nextq +1);
+        $this->request->redirect('/answer/ing/ ');
+      }
+      $qucho = ORM::factory('T1_DtQucho')
+        ->where('qu_id', '=', $question->id)
+        ->order_by('qu_id','asc')
+        ->find_all();
+      $this->template->content = View::factory('answer/ing_cho_'.$this->template->device);
+      $this->template->content->qu = $question;
+      $this->template->content->qucho = $qucho;
+    }
+    elseif ($question->type == 5)
+    {
+      $antxt = ORM::factory('T1_DtAntxt')
+        ->where('qu_id', '=', $question->id)
+        ->where('u_id', '=', $session->get('u_id'))
+        ->find();
+      if ($antxt->loaded())
+      {
+        $session->set('nextq', $nextq +1);
+        $this->request->redirect('/answer/ing/ ');
+      }
+      $this->template->content = View::factory('answer/ing_txt_'.$this->template->device);
+      $this->template->content->qu = $question;
+    }
+    Cookie::set('spend_time', time());
+	}
+}
+//end

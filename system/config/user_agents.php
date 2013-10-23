@@ -93,6 +93,21 @@ return array(
 		'android'        => 'Android',
 	),
 
+	'fp' => array(
+		'DoCoMo'        => 'DoCoMo',
+		'J-PHONE'        => 'J-PHONE',
+		'Vodafone'        => 'Vodafone',
+		'SoftBank'        => 'SoftBank',
+		'MOT-'        => 'MOT-',
+		'KDDI'        => 'KDDI',
+		'PDXGW'        => 'PDXGW',
+		'DDIPOCKET'        => 'DDIPOCKET',
+		'emobile'        => 'emobile',
+		'Huawei'        => 'Huawei',
+		'UP\.Browser'        => 'au',
+	),
+
+
 	'robot' => array(
 		'googlebot'   => 'Googlebot',
 		'msnbot'      => 'MSNBot',

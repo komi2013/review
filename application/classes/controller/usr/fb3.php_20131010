@@ -1,0 +1,37 @@
+<?php defined('SYSPATH') OR die('No direct access allowed.');
+class Controller_Usr_Fb3 extends Controller
+{
+	public function action_index()
+	{
+    $domain = Kohana::$config->load('domain');
+    $client_id =  $domain->get('fb_id');
+    $client_secret =  $domain->get('fb_secret');
+
+    $login_url = 'https://www.facebook.com/dialog/oauth?'.$client_id.'redirect_uri=https://'.$_SERVER['HTTP_HOST'].'/usr/fb3/';
+
+    $fb_url = 'https://graph.facebook.com/oauth/access_token?';
+    $redirect_uri = 'redirect_uri=https://'.$_SERVER['HTTP_HOST'].'/usr/fb3/&';
+    
+    
+    
+    $contents = file_get_contents($fb_url.$client_id.$redirect_uri.$client_secret.'code='.$_GET['code']);
+    $arr_url = preg_split('/=/', $contents, -1, PREG_SPLIT_OFFSET_CAPTURE);
+    $contents = file_get_contents('https://graph.facebook.com/me?access_token='.$arr_url[1][0]);
+    $contents = json_decode($contents);
+
+//     echo Debug::vars($contents);
+    
+    $id = $contents->id;
+    echo '<img src="'.'http://graph.facebook.com/'.$id.'/picture'.'">';
+//     $session = Session::instance();
+
+    $usr = new Model_T1_DtUsr();
+    $usr->col['pv_u_id'] = $contents->id;
+    $usr->col['provider'] = 1;
+    $usr->col['name'] = $contents->first_name;
+    $usr->col['img'] = 'http://graph.facebook.com/'.$contents->id.'/picture';
+    $usr->reg_login();
+    $this->request->redirect('/maker/reviewlist/ ');
+//     Response::redirect('/maker/reviewlist/ ');
+	}
+}

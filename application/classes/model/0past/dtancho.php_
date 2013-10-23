@@ -1,0 +1,12 @@
+<?php
+
+class Model_DtAncho extends ORM
+{
+	protected static $_table_name = 'dt_ancho';
+
+  public function get_new_id() 
+  {
+    $res = DB::query("select nextval('dt_ancho_id_seq')")->execute();
+    return $res[0]['nextval'];
+  }
+}

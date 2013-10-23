@@ -1,0 +1,78 @@
+<?php defined('SYSPATH') OR die('No direct access allowed.');
+class Controller_Statics_Choice extends Controller_Template {
+	public function action_index()
+	{
+    $this->template = Model_Tpl_Outer::call();
+    $enqu_id = Model_Check_Get::tpl('enqu',$this->template);
+    $q_num = Model_Check_Get::tpl('q_num',$this->template);
+    $session = Session::instance('database');
+    Model_Check_Session::tpl('pv_u_id',$session,$this->template);
+    $enquete = Model_Check_Enquete::tpl($enqu_id,$session,$this->template);
+    $question = Model_Check_Question::tpl($enqu_id,$q_num,$this->template);
+
+    $qucho = ORM::factory('V1_DtQucho')
+      ->where('qu_id', '=', $question->id)
+      ->order_by('id')
+      ->find_all();
+    
+    $denominator = 0;
+    $sm_q_answer = 0;
+    foreach ($qucho as $kk => $dd)
+    {
+      $denominator = $denominator + $dd->sum;
+      $statics[$question->number]['sum'][$dd->txt] = $dd->sum;
+      $sm_q_answer = $sm_q_answer + $dd->sum;
+    }  
+    $statics[$question->number]['q_txt']  = $d->txt;
+    $statics[$question->number]['denominator']  = $denominator;
+    
+    $this->template->content = View::factory('answer/end_'.$this->template->device);
+		$this->template->content->statics = $statics;
+    $this->template->content->enquete = $enquete;
+    $this->template->title = $enquete->title;
+  }
+  public function qucho()
+  {    
+    $question = ORM::factory('question')->where('enqu_id', '=', $this->enqu_id)->order_by('q_num')->find_all();
+    
+    foreach ($question as $k => $d)
+    {
+      if ($d->q_num == 5)
+      {
+        $antxt_txt  = $d->q_txt;
+      }
+      else
+      {
+        $qucho = ORM::factory('qucho')->where('p_qu_id', '=', $d->id)->order_by('id')->find_all();
+        $denominator = 0;
+        $sm_q_answer = 0;
+        foreach ($qucho as $kk => $dd)
+        {
+          $denominator = $denominator + $dd->sum;
+          $statics[$d->q_num]['sum'][$dd->txt] = $dd->sum;
+          $sm_q_answer = $sm_q_answer + $dd->sum;
+        }  
+        $statics[$d->q_num]['q_txt']  = $d->q_txt;
+        $statics[$d->q_num]['denominator']  = $denominator;
+         
+      }
+      
+    }
+		$this->template->content = View::factory('five/end_review');
+		$this->template->content->statics = $statics;
+    $this->template->content->antxt_txt = $antxt_txt;
+    $this->template->content->login = $this->session->get('pv_u_id');
+    $this->template->content->u_answered = $sm_q_answer;
+	}
+  public function antxt()
+  {
+    if (!$this->session->get('pv_u_id')) die('you must login to see this answers');
+    $this->enquete = ORM::factory('enquete')->where('id', '=', $this->enqu_id)->find();
+    $question = ORM::factory('question')->where('enqu_id', '=', $this->enqu_id)->find();
+    $antxt = ORM::factory('antxt')->where('p_qu_id', '=', $question->id)->order_by('id','desc')->find_all();
+		$this->template->content = View::factory('five/antxt');
+    $this->template->content->q_txt = $question->q_txt;
+    $this->template->content->antxt = $antxt;
+	}
+}
+//end

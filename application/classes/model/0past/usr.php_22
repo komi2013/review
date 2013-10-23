@@ -1,0 +1,12 @@
+<?php
+// namespace Model;
+// use Orm\Model
+
+class Model_Usr extends Model {
+
+//     public static function get_results()
+//     {
+//         // Database interactions
+//     }
+
+}

@@ -1,0 +1,59 @@
+<?php defined('SYSPATH') OR die('No direct access allowed.');
+class Controller_Usr_Tmpin extends Controller {
+public function action_index()
+  {
+  	$this->lang = $this->request->param('lang');
+    $func = $this->request->param('one');
+    $this->$func();
+  }
+  public function register()
+  {
+  	$post1 = Validation::factory($_POST);
+  	$post1
+  	->rule('name', 'not_empty')
+  	->rule('name', 'max_length', array(':value', '30'))
+  	;
+  	if (!$post1->check())
+    {
+  		$results = $post1->errors($this->lang);
+      $err = '';
+      foreach ($results as $d)
+      {
+        Cookie::set('err_msg',$d);
+        $this->request->redirect('/'.$this->lang.'/home/ ');
+      }
+    }
+    
+    $session = Session::instance();
+    $session->set('pv_u_id','tmp');
+    $model_usr = new Model_Usr;
+    $u_id = $model_usr->getnextval();
+    $usr = ORM::factory('usr');
+    $usr->pv_u_id = '';
+//       $usr->stage = 1;
+    $usr->name = $_POST['name'];
+    $usr->img = '';
+    $usr->id = $u_id;
+    $usr->provider = 1;
+    $usr->save();
+    $session->set('u_id',$u_id);
+    $this->request->redirect('/ja/myreview/ ');
+
+  }
+  public function logout()
+  {
+    Session::instance()->destroy();
+    $domain = new Model_Domain;    
+ 	  $this->request->redirect($domain->users.'/en/in/users/logout/');
+  }
+	public function err_msg()
+	{
+    foreach ($this->message as $k => $d)
+    {
+      $this->err[$k] = $d;
+    }
+//     return json_encode($this->err);
+  }
+
+}
+//end

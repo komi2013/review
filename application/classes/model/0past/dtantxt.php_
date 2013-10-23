@@ -1,0 +1,13 @@
+<?php
+
+class Model_DtAntxt extends ORM
+{
+	protected static $_table_name = 'dt_antxt';
+
+  public function get_new_id() 
+  {
+    $res = DB::query("select nextval('dt_antxt_id_seq')")->execute();
+    return $res[0]['nextval'];
+  }
+
+}

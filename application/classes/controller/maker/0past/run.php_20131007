@@ -1,0 +1,37 @@
+<?php
+class Controller_Mypage_Run extends Controller {
+	public function action_index()
+	{
+		if (!Session::get('u_id')) die('you must login');
+    if (isset($_GET['enqu']))
+    {
+      $enqu_id = $_GET['enqu'];
+    }
+    else
+    {
+      die('no enqu_id');  
+    }
+
+    $enqu = Model_DtEnquete::find('first', array(
+      'where' => array(
+        array('id', $enqu_id),
+      ),
+    ));
+
+    if ($enqu->u_id != Session::get('u_id')) die('you can not access this enquete');
+    if ($enqu->status > 0) die('you can not edit this enquete');
+
+    $view = View::forge('tpl_1/template');
+    $view->title = 'run';
+    $view->content = View::forge('mypage/run');
+    $view->content->enqu = $enqu;
+    $view->content->pre_url = '/answer/?enqu='.$enqu_id;
+
+    $csrf = Str::random('alnum', 16);
+    Cookie::set('csrf',$csrf);
+    $view->content->csrf = $csrf;
+
+    return $view;
+	}
+}
+//end

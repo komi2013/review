@@ -10,7 +10,7 @@ return array
 			'username'   => 'postgres',
 			'password'   => '',
 			'persistent' => FALSE,
-			'database'   => 'review',
+			'database'   => 'review4',
 		),
 		'primary_key'  => '',   // Column to return from INSERT queries, see #2188 and #2273
 		'schema'       => '',

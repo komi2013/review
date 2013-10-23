@@ -1,0 +1,73 @@
+<?php defined('SYSPATH') or die('No direct script access.');
+class Model_Access_Session extends Model {
+
+	public static function maker_chk()
+	{
+    $session = Session::instance('database');
+    if (!$session->get('pv_u_id'))
+    {
+      $view = Model_Tpl_Outer::call();
+      $view->title = 'アクセスエラー';
+      $view->content = View::factory('tpl/err_'.$view->device);
+      $view->content->msg = 'このページのアクセス権がありません。';
+      die($view); 
+    }
+	}
+	public static function get_csrf_chk()
+	{
+    if (Cookie::get('csrf') != $_GET['csrf'])
+    {
+      $tail = Model_Tpl_Device::file_tail();
+      $template = View::factory('tpl/template_'.$tail);
+      $template->title = 'CSRFエラー';
+      $template->content = View::factory('tpl/err_'.$tail);
+      $template->content->msg = 'CSRFが正しくありません';
+      die($template); 
+    }
+	}
+
+	public static function get_arg_chk($arg)
+	{
+    if (isset($_GET[$arg]))
+    {
+      return $_GET[$arg];
+    }
+    else
+    {
+      $tail = Model_Tpl_Device::file_tail();
+      $template = View::factory('tpl/template_'.$tail);
+      $template->title = $arg.' 引数エラー';
+      $template->content = View::factory('tpl/err');
+      $template->content->msg = $arg.' の引数がありません';
+      die($template); 
+    }
+	}
+
+	public static function post_arg_chk_json($arg)
+	{
+    if (isset($_POST[$arg]))
+    {
+      return $_POST[$arg];
+    }
+    else
+    {
+      $res['chk'] = 2;
+      $res['err'] = $arg.' 引数エラー';
+      die(json_encode($res)); 
+    }
+	}
+
+	public static function maker_chk_json()
+	{
+    $session = Session::instance('database');
+    if (!$session->get('pv_u_id'))
+    {
+      $res['chk'] = 3;
+      $res['err'] = 'アクセスエラー';
+      die(json_encode($res)); 
+    }
+	}
+
+}
+
+?>

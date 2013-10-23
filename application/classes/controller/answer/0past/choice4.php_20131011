@@ -1,0 +1,56 @@
+<?php defined('SYSPATH') OR die('No direct access allowed.');
+class Controller_Answer_Choice4 extends Controller {
+	public function action_index()
+	{
+    Model_Check_Csrf::json();
+    $cho_num = Model_Check_Get::json('cho_num');
+    $session = Session::instance('database');
+    $u_id = Model_Check_Session::json('u_id',$session);
+    
+//     Model_Access_Arg::post_csrf_chk_json();
+//     $cho_num = Model_Access_Arg::post_chk_json('id');
+//     $session = Model_Access_Session::usr_chk();
+
+		$question = ORM::factory('V1_DtQuestion')
+      ->where('enqu_id', '=', $session->get('enqu'))
+      ->where('number', '=', $session->get('nextq'))
+      ->find();
+    if (!$question->loaded())
+    {
+      $res['chk'] = 2;
+      $res['err'] = 'no question on this page';
+      die(json_encode($res));
+    }
+    $qucho = ORM::factory('V1_DtQucho')
+      ->where('qu_id', '=', $question->id)
+      ->order_by('id')
+      ->find_all();
+    $cho_id = 0;
+    foreach ($qucho as $k => $d)
+    { ++$k;
+      if ($k == $cho_num) $cho_id = $d->id; 
+    }
+
+    error_reporting(E_ALL & E_NOTICE);
+    
+//     $ancho = ORM::factory('T1_DtAncho')
+//       ->where('qu_id', '=', $question->id)
+//       ->where('u_id', '=', $session->get('u_id'))
+//       ->find();
+//     if ($ancho->loaded())
+//     {
+//       $res['chk'] = 3;
+//       $res['err'] = 'you can not send many times';
+//       die(json_encode($res));
+//     }
+    $ancho = ORM::factory('V1_DtAncho');
+    $ancho->qu_id = $question->id;
+    $ancho->u_id = $session->get('u_id');
+		$ancho->cho_id = $cho_id;
+		$ancho->save();
+    $session->set('nextq',++$session->get('nextq'))
+    $res['chk'] = 1;
+    die(json_encode($res));
+	}
+}
+//end

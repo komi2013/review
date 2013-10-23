@@ -1,0 +1,25 @@
+<?php defined('SYSPATH') or die('No direct script access.');
+class Model_Tpl_Device extends Model {
+//   public static $tpl_template = 'tpl/template';
+//   public static $tpl_err = 'tpl/err';
+
+	public static function file_tail()
+	{
+    $arr_phone = Request::user_agent(array('mobile', 'fp'));
+    if ($arr_phone['mobile'])
+    {
+      return 'sp'; 
+    }
+    elseif ($arr_phone['fp'])
+    {
+      return 'fp';
+    }
+    else
+    {
+      return 'pc';
+    }
+	}
+
+}
+
+?>
