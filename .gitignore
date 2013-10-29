@@ -1,0 +1,6 @@
+*application/logs/*
+application/config/domain.php
+#test.php
+test2.php
+test3.php
+test4.php
