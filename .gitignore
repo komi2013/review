@@ -1,4 +1,5 @@
 #application/logs/
-application/config/
+application/config/*
 #application/cache/
 #application/bootstrap.php
+test1.php
