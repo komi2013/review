@@ -1,9 +1,10 @@
 $('#title_end').click(function() {
   var param = {
+    csrf    : csrf,
     enqu    : enqu,
     title   : $('#title').val(),
-    domain     : $('#domain').val()
-    passwd     : $('#passwd').val()
+    domain     : $('#domain').val(),
+    passwd     : $('#passwd').val(),
   };
   $.get(post_url_1,param,function(res) {
     if(res['chk'] == 1){

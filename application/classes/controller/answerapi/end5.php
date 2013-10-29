@@ -16,7 +16,7 @@ class Controller_AnswerApi_End5 extends Controller {
     $third_url = $enquete->present_domain
       .'?u_id='.$u_id
       .'&enqu='.$enqu_id
-      .'&passwd='.$enquete->present_passwd
+      .'&present_passwd='.$enquete->present_passwd
     ;
     
     $from_third = @file_get_contents($third_url);

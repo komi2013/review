@@ -8,7 +8,8 @@
 	</head>
 	<body>
 <div>
-  &nbsp;<a href="/home/" class="radius_button">home</a>
+  &nbsp;<a href="/home/">home</a>
+  &nbsp;<a href="/maker/reviewlist">maker</a>
   &nbsp;Komahana©2013
   &nbsp;PC
 </div>

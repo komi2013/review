@@ -40,6 +40,7 @@ class Controller_Usr_Twcallback3 extends Controller
     Cookie::set('name', $access_token['screen_name']);
     Cookie::set('img', $profile->profile_image_url_https);
     Cookie::set('lang', 'ja');
+    Cookie::set('paid', $maker->paid);
     $this->request->redirect('/maker/reviewlist/ ');
 	}
 }

@@ -5,9 +5,9 @@ class Controller_Maker_New3 extends Controller {
     $this->template = Model_Tpl_Outer::call();
     Model_Check_Csrf::tpl($this->template);
     $session = Session::instance('database');
-    Model_Check_Session::tpl('pv_u_id',$session);
+    Model_Check_Session::tpl('pv_u_id',$session,$this->template);
     $enqu_cnt = ORM::factory('V1_DtEnquete')
-      ->where('u_id', '=', $session->get('u_id'))
+      ->where('maker_id', '=', $session->get('maker_id'))
       ->where('status', '=', 0)
       ->count_all();
 
@@ -19,10 +19,11 @@ class Controller_Maker_New3 extends Controller {
     }
 
     $enquete = ORM::factory('V1_DtEnquete');
-  	$enquete->u_id = $session->get('u_id');
+  	$enquete->maker_id = $session->get('maker_id');
     $enquete->end = '回答ありがとうございました';
   	$enquete->status = 0;
     $enquete->title = 'レビュー';
+    $enquete->back_domain = 'https://livehouse.komahana.info/sample1/fake/';
     $enquete->present_passwd = Text::random('alnum', 15);
   	$enquete->save();
 //     $this->session->set('posted', 2);

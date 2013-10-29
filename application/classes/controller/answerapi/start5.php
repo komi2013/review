@@ -19,7 +19,8 @@ class Controller_AnswerApi_Start5 extends Controller {
       $encrypt = new Model_Encrypt_Session;
       $encry_session = $encrypt->encode($arr_session);
       $res['chk'] = 1;
-      $res['encry'] = $encry_session; 
+      $res['encry'] = $encry_session;
+      $res['redirect'] = '/answerapi/ing5/'; 
     }
     else
     {

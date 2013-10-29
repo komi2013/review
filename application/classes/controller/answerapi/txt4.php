@@ -31,7 +31,8 @@ class Controller_AnswerApi_Txt4 extends Controller {
       $arr_session['nextq'] = ++$nextq;
       $encrypt = new Model_Encrypt_Session;
       $encry_session = $encrypt->encode($arr_session);
-      $res['encry'] = $encry_session; 
+      $res['encry'] = $encry_session;
+      $res['redirect'] = '/answerapi/ing5/'; 
       die(json_encode($res));
     }
 		catch (ORM_Validation_Exception $e)

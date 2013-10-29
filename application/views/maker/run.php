@@ -10,13 +10,20 @@
 
 <div id="option">
 
+<a>タイトル</a><br>
 <textarea id="title"><?=$enqu->title?></textarea><br>
-<span id="title_err"></span>
+<span id="title_err"></span><br>
 
+<a>プレゼントAPI URL</a><br>
 <textarea id="domain"><?=$enqu->present_domain?></textarea><br>
 <span id="domain_err"></span><br>
 
+<a>プレゼント用パスワード</a><br>
 <textarea id="passwd"><?=$enqu->present_passwd?></textarea><br>
+<span id="passwd_err"></span><br>
+
+<a>アンケート終了後に戻るURL</a><br>
+<textarea id="passwd"><?=$enqu->back_domain?></textarea><br>
 <span id="passwd_err"></span><br>
 
 <button id="title_end">更新</button>

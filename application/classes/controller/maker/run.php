@@ -3,6 +3,7 @@ class Controller_Maker_Run extends Controller_Template {
 	public function action_index()
 	{
     $this->template = Model_Tpl_Outer::call();
+    $this->template->title = '配信';
     $enqu_id = Model_Check_Get::tpl('enqu',$this->template);
     $session = Session::instance('database');
     Model_Check_Session::tpl('pv_u_id',$session,$this->template);

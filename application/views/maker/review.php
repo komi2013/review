@@ -81,7 +81,7 @@ if($disp==1){?>
 <br>
 <?php }
 
-if($disp==1){?>
+if($free_txt_question){?>
   <a href="/maker/run/?enqu=<?=$_GET['enqu']?>" id="run">配信</a>
 <?php }else{ ?>
   <a href="/maker/run/?enqu=<?=$_GET['enqu']?>" id="run" style="display:none;">配信</a>

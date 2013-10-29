@@ -16,6 +16,7 @@ class Controller_Answer_Start3 extends Controller {
     
     if ($enquete->maker_id == $session->get('maker_id'))
     {
+      $session->set('u_id', $u_id);
       $session->set('nextq', 1);
       $session->set('enqu', $enqu_id);
       $this->request->redirect('/answer/ing/ ');

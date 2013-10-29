@@ -10,8 +10,9 @@ class Controller_Maker_Title4 extends Controller {
     Model_Check_EnquStatus::json($enquete);
 		try
   	{
-      $enquete->title = $_POST['title'];
-  		$enquete->end = $_POST['end'];
+      $enquete->title = $_GET['title'];
+  		$enquete->present_domain = $_GET['domain'];
+      $enquete->present_passwd = $_GET['passwd'];
       $enquete->update();
       $res['chk'] = 1;
       $csrf = Text::random('alnum', 16);

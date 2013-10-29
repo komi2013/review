@@ -25,14 +25,14 @@ class Controller_Answer_Endfp extends Controller_Template {
     $third_url = $enquete->present_domain
       .'?u_id='.$u_id
       .'&enqu='.$enqu_id
-      .'&passwd='.$enquete->present_passwd
+      .'&present_passwd='.$enquete->present_passwd
     ;
     
     $from_third = @file_get_contents($third_url);
 
     $arr_res = json_decode($from_third,true);
     
-    $res_msg = isset($arr_res['msg']) ? $arr_res['msg'] : $from_third;
+    $res_msg = isset($arr_res['msg']) ? $arr_res['msg'] : '通信エラー！もう一度リロードしてください。';
       
     $this->template->content = View::factory('answer/end_'.$this->template->device);
     $this->template->content->enquete = $enquete;

@@ -30,6 +30,7 @@ class Controller_AnswerApi_Ing5 extends Controller {
       $encrypt = new Model_Encrypt_Session;
       $encry_session = $encrypt->encode($arr_session);
       $res['encry'] = $encry_session; 
+      $res['redirect'] = '/answerapi/end5/';
       die(json_encode($res));
     }
     if ($question->type == 1)
@@ -44,21 +45,24 @@ class Controller_AnswerApi_Ing5 extends Controller {
         $arr_session['nextq'] = $res['q_num'] = $nextq +1;
         $encrypt = new Model_Encrypt_Session;
         $encry_session = $encrypt->encode($arr_session);
-        $res['encry'] = $encry_session; 
+        $res['encry'] = $encry_session;
+        $res['redirect'] = '/answerapi/ing5/'; 
         die(json_encode($res));
       }
       $qucho = ORM::factory('V1_DtQucho')
         ->where('qu_id', '=', $question->id)
         ->order_by('qu_id','asc')
         ->find_all();
-      foreach ($question as $d)
-      {
-        $res['question_txt'] = H::t($d->txt);
-      }
+      $res['question_txt'] = H::c($question->txt);
+//       foreach ($question as $d)
+//       {
+//         $res['question_txt'] = H::t($question->txt);
+//       }
       foreach ($qucho as $k => $d)
       { ++$k;
         $res['choice_txt'][$k] = H::c($d->txt);
       }
+      $res['get'] = '/answerapi/choice4/'; 
     }
     elseif ($question->type == 5)
     {
@@ -71,18 +75,22 @@ class Controller_AnswerApi_Ing5 extends Controller {
         $arr_session['nextq'] = $res['q_num'] = $nextq +1;
         $encrypt = new Model_Encrypt_Session;
         $encry_session = $encrypt->encode($arr_session);
-        $res['encry'] = $encry_session; 
+        $res['encry'] = $encry_session;
+        $res['redirect'] = '/answerapi/ing5/'; 
         die(json_encode($res));
       }
-      foreach ($question as $d)
-      {
-        $res['question_txt'] = H::t($d->txt);
-      }
+      $res['question_txt'] = H::c($question->txt);
+//       foreach ($question as $d)
+//       {
+//         $res['question_txt'] = H::t($d->txt);
+//       }
+      $res['get'] = '/answerapi/txt4/';
     }
 //     $arr_session['spend_time'] = time();
     $encrypt = new Model_Encrypt_Session;
     $encry_session = $encrypt->encode($arr_session);
-    $res['encry'] = $encry_session; 
+    $res['encry'] = $encry_session;
+//     $res['redirect'] = '/answerapi/ing5/'; 
     die(json_encode($res));
 	}
 }

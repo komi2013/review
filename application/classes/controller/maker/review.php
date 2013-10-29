@@ -46,7 +46,6 @@ class Controller_Maker_Review extends Controller_Template {
 	  $this->template->content = View::factory('maker/review');
     $this->template->content->arr_qu = $arr_qu;
     $this->template->content->free_txt_question = $free_txt_question;
-    
 //     $this->template->content->qu_arr = $this->qu_arr;
 //     $this->template->content->qu_disp = $this->qu_disp;
 	}

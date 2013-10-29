@@ -35,7 +35,7 @@ class Controller_AnswerApi_Choice4 extends Controller {
     $encry_session = $encrypt->encode($arr_session);
     $res['encry'] = $encry_session; 
     
-    
+    $res['redirect'] = '/answerapi/ing5/';
 //     $session->set('nextq',++$nextq)
     $res['chk'] = 1;
     

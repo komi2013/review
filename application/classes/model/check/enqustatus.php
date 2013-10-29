@@ -12,6 +12,18 @@ class Model_Check_EnquStatus extends Model {
     }
     return $enqu;
 	}
+	public static function json($enqu)
+	{
+    if ($enqu->status > 0)
+    {
+      I18n::lang(Cookie::get('lang'));
+      $res['chk'] = 2;
+      $res['err'] = __('it is running, unable to edit');
+      die(json_encode($res)); 
+    }
+    return $enqu;
+	}
+
 }
 
 ?>

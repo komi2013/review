@@ -1,6 +1,7 @@
 <div>
-  <a><?=$enquete->title?></a></br>
-  <a><?=$res_msg?></a>
+  <a><?=$enquete->title?></a><br>
+  <a><?=H::t($res_msg)?></a><br>
+  <a href="<?=$enquete->back_domain?>">アンケート前画面に戻る</a>
 </div>
 
 <script type="text/javascript">

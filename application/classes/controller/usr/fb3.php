@@ -33,6 +33,7 @@ class Controller_Usr_Fb3 extends Controller
     Cookie::set('name', $contents['first_name']);
     Cookie::set('img', 'http://graph.facebook.com/'.$contents['id'].'/picture');
     Cookie::set('lang', 'ja');
+    Cookie::set('paid', $maker->paid);
     $this->request->redirect('/maker/reviewlist/ ');
 	}
 }
