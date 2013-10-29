@@ -8,5 +8,5 @@ return array(
   'tw_id' => 'Tcd6JT9Wa3b3BJDdvooVg',
   'tw_secret' => 'GVyOtqnhifwyMvrgdMekooWaQdeBLvCKSA9AwfKyMLk',
   'tw_callbak' => 'https://review-stg.komahana.info/usr/twcallback3/',
-  'test' => 'test git8',
+  'test' => ' 8 ',
 );
