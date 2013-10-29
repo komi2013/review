@@ -1,6 +1,6 @@
 *application/logs/*
-application/config/domain.php
+application/config/
 #test.php
-test2.php
-test3.php
-test4.php
+#test2.php
+#test3.php
+#test4.php
