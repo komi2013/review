@@ -1,6 +1,4 @@
-*application/logs/*
+#application/logs/
 application/config/
-#test.php
-#test2.php
-#test3.php
-#test4.php
+#application/cache/
+#application/bootstrap.php
