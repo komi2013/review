@@ -1,12 +1,11 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 return array(
-  'dir' => '/stg',
+  'dir' => '/prd',
 
-  'fb_id' => 'client_id=667157173308772&',
-  'fb_secret' => 'client_secret=c7d12d3e5cec263f086765670c777573&',
+  'fb_id' => 'client_id=1412377278985770&',
+  'fb_secret' => 'client_secret=08ec0d68f9d1096d82776f687b3d116a&',
 
-  'tw_id' => 'Tcd6JT9Wa3b3BJDdvooVg',
-  'tw_secret' => 'GVyOtqnhifwyMvrgdMekooWaQdeBLvCKSA9AwfKyMLk',
-  'tw_callbak' => 'https://review-stg.komahana.info/usr/twcallback3/',
-  'test' => ' 10 ',
+  'tw_id' => '6AjeLHNvdrWYc297oIKpA',
+  'tw_secret' => 'OxeFNJdepB9F4JHzuix6lrtpcqYspqv5U2a3wVkD0',
+  'tw_callbak' => 'https://review.komahana.info/usr/twcallback3/',
 );

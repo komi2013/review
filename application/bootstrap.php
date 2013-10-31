@@ -1,5 +1,5 @@
 <?php defined('SYSPATH') or die('No direct script access.');
-//6666
+//APPPATH = /prd/review/application/
 require SYSPATH.'classes/kohana/core'.EXT;
 if (is_file(APPPATH.'classes/kohana'.EXT))
 {
