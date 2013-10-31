@@ -1,9 +1,13 @@
 <?php 
-echo Debug::vars(Cookie::get('lang'));
-$lang = Cookie::get('lang') ?: 'ja';
-$variable_class = 'Model_Msg_'.$lang;
-echo $variable_class::$running;
+// echo Debug::vars(Cookie::get('lang'));
+// $lang = Cookie::get('lang') ?: 'ja';
+// $variable_class = 'Model_Msg_'.$lang;
+// echo $variable_class::$running;
 ?>
+
+
+<a href="">kko</a>
+<img src="/public/no_image.jpg">
 <table>
 <tr><td id="head">スナスタ掲示板</td></tr>
 <tr><td><br></td></tr>

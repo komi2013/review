@@ -1,5 +1,5 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
-class Controller_Test_Instgram extends Controller_Template {
+class Controller_Test_Cache extends Controller_Template {
 
   public function action_index()
   {
@@ -7,7 +7,7 @@ class Controller_Test_Instgram extends Controller_Template {
 //     $cache_res = Cache::instance('file')->get('foo');
 //     echo $cache_res;
 
-    $this->template = View::factory('/tpl/template_cache');
+    $this->template = View::factory('home/test');
     $this->template->title = 'cache';
     $this->template->content = 'cache';
 //     $u_id = isset($_GET['u_id'])? $_GET['u_id'] : 'ありません' ;

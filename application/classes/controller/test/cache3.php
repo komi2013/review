@@ -1,5 +1,5 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
-class Controller_Test_Instgram extends Controller_Template {
+class Controller_Test_Cache3 extends Controller_Template {
 
   public function action_index()
   {
