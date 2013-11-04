@@ -32,6 +32,7 @@ class Controller_Maker_ReviewList extends Controller_Template
     $this->template->content->next_page = ++$page;
     $this->template->content->page_end = floor($enquete_cnt / 10);
 		$this->template->content->enqu = $enqu_arr;
+//     echo View::factory('profiler/stats');
 	}
 
 }
