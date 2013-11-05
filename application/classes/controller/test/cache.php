@@ -3,9 +3,11 @@ class Controller_Test_Cache extends Controller_Template {
 
   public function action_index()
   {
+    echo $err;
+    echo 'dd';
 //     Cache::instance('apc')->set('apc_test', 'apc test');
-    $cache_res = Cache::instance('apc')->get('enqu3');
-    Cache::instance('apc')->delete_all();
+//     $cache_res = Cache::instance('apc')->get('enqu3');
+//     Cache::instance('apc')->delete_all();
 //     $enquete = ORM::factory('V1_DtEnquete')
 // //       ->where('maker_id', '=', $maker_id)
 //       ->order_by('id','DESC')
@@ -32,8 +34,8 @@ class Controller_Test_Cache extends Controller_Template {
 //       ++$i;
 //     }
 // 
-    echo 'deleted';
-    echo Debug::vars($cache_res);
+//     echo 'deleted';
+//     echo Debug::vars($cache_res);
 
 //     $this->template = View::factory('home/test');
 //     $this->template->title = 'cache';

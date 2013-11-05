@@ -15,7 +15,7 @@ setlocale(LC_ALL, 'en_US.utf-8');
 spl_autoload_register(array('Kohana', 'auto_load'));
 ini_set('unserialize_callback_func', 'spl_autoload_call');
 I18n::lang('en-us');
-Kohana::$environment = Kohana::PRODUCTION;
+// Kohana::$environment = Kohana::PRODUCTION;
 // if (isset($_SERVER['KOHANA_ENV']))
 // {
 // //   echo $_SERVER['KOHANA_ENV'];
@@ -33,6 +33,7 @@ Kohana::init(array(
   'index_file' => FALSE,
 //   'errors' => FALSE,
 ));
+error_reporting(E_ALL & ~E_NOTICE);
 Kohana::$log->attach(new Log_File(APPPATH.'logs'));
 Kohana::$config->attach(new Config_File);
 Kohana::modules(array(
@@ -55,6 +56,8 @@ Route::set('default', '(<directory>(/<controller>(/<action>)))')
     'controller' => $uri[1] ?: 'home',
     'action'     => 'index',
 ));
+// throw HTTP_Exception::factory(404, 'File not found!');
+
 // ini_set( 'display_errors', 0 );
 // $request->execute();
 
